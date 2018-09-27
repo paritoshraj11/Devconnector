@@ -33,7 +33,7 @@ class Profile extends Component {
               <ProfileHeader profile={profile.profile} />
               <ProfileAbout profile={profile.profile}/>
               <ProfileCredential profile={profile.profile}/>
-              <ProfileGitHub profile={profile.profile}/>
+               {profile.profile.githubusername ? <ProfileGitHub githubusername={profile.profile.githubusername}/>:null }
             </div>
           </div>
         </div>

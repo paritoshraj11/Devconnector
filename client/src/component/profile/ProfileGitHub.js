@@ -1,36 +1,61 @@
-import React, { Component } from 'react';
-import {Link} from "react-router-dom"
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { githubClientId, githubClientSecret } from "../../clientConfig";
 
 export default class ProfileGitHub extends Component {
+  state = {
+    repos: []
+  };
+
+  componentDidMount() {
+    let { githubusername } = this.props;
+    //here using fetch because axios have set Authentication-header  for application's loged in user , which give bad request error
+    fetch(
+      `https://api.github.com/users/${githubusername}/repos?per_page=5&sort='created: asc'&client_id=${githubClientId}&client_secret=${githubClientSecret}`
+    )
+      .then(res => res.json())
+      .then(res => {
+        this.setState({ repos:res});
+      })
+      .catch(err => {
+        //console.log(">>>>>>>github api error",err.response)
+      });
+  }
+
   render() {
-      let repo = {}
-    return (
-        <div className="container">
-        <hr />
-        <h3 class="mb-4">Latest Github Repos</h3>
-        <div key={repo.id} class="card card-body mb-2">
-          <div class="row">
-            <div class="col-md-6">
-              <h4>
-                <Link to={'/'} class="text-info" target="_blank"> Repository One
-                </Link>
-              </h4>
-              <p>Repository description</p>
-            </div>
-            <div class="col-md-6">
-              <span class="badge badge-info mr-1">
-                Stars: 44
-              </span>
-              <span class="badge badge-secondary mr-1">
-                Watchers: 21
-              </span>
-              <span class="badge badge-success">
-                Forks: 122
-              </span>
-            </div>
+    const { repos } = this.state;
+    const repoItems = repos.map(repo => (
+      <div key={repo.id} className="card card-body mb-2">
+        <div className="row">
+          <div className="col-md-6">
+            <h4>
+              <Link to={repo.html_url} className="text-info" target="_blank">
+                {repo.name}
+              </Link>
+            </h4>
+            <p>{repo.description}</p>
+          </div>
+          <div className="col-md-6">
+            <span className="badge badge-info mr-1">
+              Stars: {repo.stargazers_count}
+            </span>
+            <span className="badge badge-secondary mr-1">
+              Watchers: {repo.watchers_count}
+            </span>
+            <span className="badge badge-success">
+              Forks: {repo.forks_count}
+            </span>
           </div>
         </div>
       </div>
-    )
+    ));
+    return (
+      <div className="container">
+        <hr />
+        <h3 className="mb-4">Latest Github Repos</h3>
+        {repoItems}
+      </div>
+    );
   }
 }

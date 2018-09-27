@@ -1,28 +1,40 @@
-
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import {logOutUser,clearCurrentProfile} from "../action"
+import { logOutUser, clearCurrentProfile } from "../action";
 
 class NavBar extends Component {
-
-  onClick = (e) =>{
+  onClick = e => {
     e.preventDefault();
-   this.props.logOutUser();
-   this.props.clearCurrentProfile();
-  }
+    this.props.logOutUser();
+    this.props.clearCurrentProfile();
+  };
 
   render() {
+    let { auth } = this.props;
+    let { user } = auth;
     let userLink = (
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
-          <a  onClick={this.onClick} className="nav-link" href="">
-            Sign Out
+          <Link className="nav-link" to="/dashboard">
+            Dashboard
+          </Link>
+        </li>
+        <li className="nav-item">
+          <a href="" onClick={this.onClick} className="nav-link">
+            <img
+              className="rounded-circle"
+              src={user.avatar}
+              alt={user.name}
+              style={{ width: "25px", marginRight: "5px" }}
+              title="You must have a Gravatar connected to your email to display an image"
+            />{" "}
+            Logout
           </a>
         </li>
       </ul>
     );
-  
+
     let guestLink = (
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
@@ -37,8 +49,6 @@ class NavBar extends Component {
         </li>
       </ul>
     );
-    
-    let {auth} = this.props;
 
     return (
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
@@ -65,19 +75,21 @@ class NavBar extends Component {
               </li>
             </ul>
           </div>
-           
-           {auth.isAuthenticated ? userLink : guestLink }
 
+          {auth.isAuthenticated ? userLink : guestLink}
         </div>
       </nav>
     );
   }
 }
 
-const mapStateToProps = (store) =>{
+const mapStateToProps = store => {
   return {
-    auth:store.auth
-  }
-}
+    auth: store.auth
+  };
+};
 
-export default NavBar = connect(mapStateToProps,{logOutUser,clearCurrentProfile})(NavBar);
+export default (NavBar = connect(
+  mapStateToProps,
+  { logOutUser, clearCurrentProfile }
+)(NavBar));

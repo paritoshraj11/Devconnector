@@ -13,7 +13,7 @@ export default class ProfileHeader extends Component {
          <div className="card card-body bg-info text-white mb-3">
             <div className="row">
               <div className="col-4 col-md-3 m-auto">
-                <img className="rounded-circle" src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200" alt="" />
+                <img className="rounded-circle" src={user.avatar} alt="" />
               </div>
             </div>
             <div className="text-center">

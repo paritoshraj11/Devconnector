@@ -2,7 +2,11 @@ import express from "express";
 import mongoose from "mongoose";
 import passport from "passport";
 import { User, Profile } from "../../models/index";
-import { profileValidator, experienceValidator,educationValidator } from "./validator/index";
+import {
+  profileValidator,
+  experienceValidator,
+  educationValidator
+} from "./validator/index";
 
 const route = express.Router();
 
@@ -36,7 +40,10 @@ route.get(
 route.get("/handle/:handle", async (req, res) => {
   let { handle } = req.params;
   try {
-    let profile = await Profile.findOne({ handle: handle }).populate("user","name email");
+    let profile = await Profile.findOne({ handle: handle }).populate(
+      "user",
+      "name email avatar"
+    );
     if (!profile) {
       return res.status(400).send("profile not found by this handle");
     }
@@ -52,7 +59,7 @@ route.get("/user/:user_id", async (req, res) => {
   try {
     let profile = await Profile.find({ user: user_id }).populate(
       "user",
-      "name email"
+      "name email avatar"
     );
     if (!profile) {
       return res.status(400).send(" profile not found for this user_id");
@@ -65,8 +72,7 @@ route.get("/user/:user_id", async (req, res) => {
 
 route.get("/all", async (req, res) => {
   try {
-    let profiles = await Profile.find().populate("user", "name email");
-    console.log(">>>>>>profiles", profiles);
+    let profiles = await Profile.find().populate("user", "name email avatar");
     if (!profiles) {
       return res.status(400).send("profiles not found");
     }
@@ -89,7 +95,7 @@ route.post(
       location,
       bio,
       status,
-      githubUserName,
+      githubusername,
       skills,
       youtube,
       google,
@@ -97,6 +103,7 @@ route.post(
       twitter,
       linkedin
     } = req.body;
+
 
     const { error, isValid } = profileValidator(req.body);
     if (!isValid) {
@@ -114,7 +121,7 @@ route.post(
     if (location) profileFields.location = location;
     if (bio) profileFields.bio = bio;
     if (status) profileFields.status = status;
-    if (githubUserName) profileFields.githubUserName = githubUserName;
+    if (githubusername) profileFields.githubusername = githubusername;
     if (status) profileFields.status = status;
     if (skills) profileFields.skills = skills;
     profileFields.social = {};
@@ -123,31 +130,35 @@ route.post(
     if (facebook) profileFields.social.facebook = facebook;
     if (twitter) profileFields.social.twitter = twitter;
     if (linkedin) profileFields.social.linkedin = linkedin;
-    let userProfile = await Profile.findOne({ user: req.user._id });
-    if (userProfile) {
-      //profile exists: update the profile
-      let updatedProfile = await Profile.findOneAndUpdate(
-        { user: req.user._id },
-        { $set: profileFields },
-        { new: true }
-      );
-      return res.json(updatedProfile);
-    } else {
-      //profile dont exists: create one:
-      let profileWithHandleExists = await Profile.findOne({
-        handle: profileFields.handle
-      });
-      if (profileWithHandleExists) {
-        errors.handle = " this handle already exists";
-        return res.status(400).json(errors);
-      }
+    try {
+      let userProfile = await Profile.findOne({ user: req.user._id });
+      if (userProfile) {
+        //profile exists: update the profile
+        let updatedProfile = await Profile.findOneAndUpdate(
+          { user: req.user._id },
+          { $set: profileFields },
+          { new: true }
+        );
+        return res.json(updatedProfile);
+      } else {
+        //profile dont exists: create one:
+        let profileWithHandleExists = await Profile.findOne({
+          handle: profileFields.handle
+        });
+        if (profileWithHandleExists) {
+          errors.handle = " this handle already exists";
+          return res.status(400).json(errors);
+        }
 
-      //going to save:
-      let profile = new Profile(profileFields);
-      let savedProfile = await profile.save();
-      if (savedProfile) {
-        res.status(200).json(savedProfile);
+        //going to save:
+        let profile = new Profile(profileFields);
+        let savedProfile = await profile.save();
+        if (savedProfile) {
+          res.status(200).json(savedProfile);
+        }
       }
+    } catch (err) {
+      console.log(">>>>>>>error in creating /updating user profile", err);
     }
   }
 );

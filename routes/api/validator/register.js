@@ -3,10 +3,6 @@ import { isEmpty } from "../utility";
 export const userRegisterValidator = data => {
   let { name, email, password, password2 } = data;
 
-  console.log(">>>>>>>>>>>>> matching password",password2);
-  console.log(">>>>>>>>>>>>> matching password",password);
-
-
   let error = {};
   if (isEmpty(name)) {
     error.name = "Name is Empty, provide valid username";

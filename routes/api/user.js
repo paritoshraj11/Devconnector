@@ -5,6 +5,7 @@ import { keys } from "../../config/connection";
 import jwt from "jsonwebtoken";
 import {userRegisterValidator,userLoginValidator} from "./validator/index"
 var bcrypt = require("bcryptjs");
+var gravatar = require("gravatar")
 const route = express.Router();
 
 route.get("/", (req, res) => {
@@ -26,10 +27,16 @@ route.post("/register", async (req, res) => {
     if (user) {
       res.status(400).json({ email: "Email already exists try to log in" });
     } else {
+      let avatar = gravatar.url(email,{
+        s:'200',//size
+        r:'pg',   //rating
+        d:'mm'  //default
+      }) 
       let user = new User({
         name,
         email,
-        password
+        password,
+        avatar
       });
       let salt = await bcrypt.genSalt(10);
       let hash = await bcrypt.hash(password.toString(), salt);
@@ -38,6 +45,7 @@ route.post("/register", async (req, res) => {
       res.json(user);
     }
   } catch (err) {
+    console.log(">>>>>>err",err)
     return res.status(400).json(err)
   }
 });
@@ -65,7 +73,8 @@ route.post("/login", async (req, res) => {
     let payload = {
       _id:user._id,
       email:user.email,
-      name:user.name
+      name:user.name,
+      avatar:user.avatar
     }
     let token = await jwt.sign(payload,keys.secretKey);
     res.json({ msg: "Sucsess",token:'Bearer '+token });
