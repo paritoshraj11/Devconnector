@@ -4,8 +4,6 @@ export default class ProfileHeader extends Component {
   render() {
    let {profile} = this.props;
    let {user,company,location} = profile   
-   console.log(">>>>>>>> profile details",JSON.stringify(profile))
-   console.log(">>>>profile.user",profile.user)
     return (
        <div className="container">
           <div className="row">

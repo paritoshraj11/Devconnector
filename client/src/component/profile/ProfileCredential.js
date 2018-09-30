@@ -13,7 +13,7 @@ export default class ProfileCredential extends Component {
           experience.map((experience)=>{
             return <li className="list-group-item">
             <h4>{experience.company}</h4>
-            <p>{`${moment(experience).format("MMM YYYY")} - ${experience.current?'Current':moment(experience.to).format("MMM YYYY")}`}</p>
+            <p>{`${moment(experience).format("MMM YYYY")} - ${experience.to?moment(experience.to).format("MMM YYYY"):'Current'}`}</p>
             <p>
               <strong>Position:</strong> {experience.title}
             </p>

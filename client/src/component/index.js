@@ -10,7 +10,9 @@ import EditProfile from "./createProfile/EditProfile";
 import AddExperience from "./addCredential/AddExperience"
 import AddEducation from "./addCredential/AddEducation"
 import Profiles from "./profiles/Profiles";
-import Profile from "./profile/Profile"
+import Profile from "./profile/Profile";
+import Posts from "./post/Posts";
+import Post from "./post/Post"
 export {
   NavBar,
   Landing,
@@ -24,5 +26,7 @@ export {
   AddExperience,
   AddEducation,
   Profiles,
-  Profile
+  Profile,
+  Posts,
+  Post
 };

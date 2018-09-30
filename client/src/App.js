@@ -15,7 +15,9 @@ import {
   AddExperience,
   AddEducation,
   Profiles,
-  Profile
+  Profile,
+  Posts,
+  Post
 } from "./component/index";
 import store from "./store";
 import setAuthToken from "./util/setAuthToken";
@@ -74,6 +76,20 @@ class App extends Component {
                   path="/add-education"
                   exact
                   component={AddEducation}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  path="/feed"
+                  exact
+                  component={Posts}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  path="/post/:_id"
+                  exact
+                  component={Post}
                 />
               </Switch>
             </div>

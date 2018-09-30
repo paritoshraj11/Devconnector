@@ -19,7 +19,6 @@ class CredentialDetail extends Component {
 }
 
 const ExperienceList = ({ experience }) => {
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>experience111111111",experience)
   if (!experience || !experience.length) {
     return null;
   }

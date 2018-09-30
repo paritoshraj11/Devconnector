@@ -54,7 +54,9 @@ class EditProfile extends Component {
             status: isEmpty(profile.status) ? "":profile.status,
             githubusername: isEmpty(profile.githubusername) ? "":profile.githubusername,
             bio: isEmpty(profile.bio) ? "":profile.bio,
-            skills: "",
+            skills: profile.skills ? profile.skills.reduce((prev,current)=>{
+            return prev + current + ","
+            },"") :"",
             twitter: isEmpty(profile.twitter) ? "":profile.twitter,
             facebook: isEmpty(profile.facebook) ? "":profile.facebook,
             youtube: isEmpty(profile.youtube) ? "":profile.youtube,

@@ -15,6 +15,11 @@ class NavBar extends Component {
     let { user } = auth;
     let userLink = (
       <ul className="navbar-nav ml-auto">
+      <li className="nav-item">
+          <Link className="nav-link" to="/feed">
+            Feed
+          </Link>
+        </li>
         <li className="nav-item">
           <Link className="nav-link" to="/dashboard">
             Dashboard
