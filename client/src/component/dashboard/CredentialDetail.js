@@ -1,8 +1,17 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import moment from "moment";
-
+import {deleteProfileCredentail} from "../../action"
 class CredentialDetail extends Component {
+  
+  deleteExperience = (experienceId) =>{
+    this.props.deleteProfileCredentail("experience",experienceId);
+  }
+
+  deleteEducation = (educationId) =>{
+    this.props.deleteProfileCredentail("education",educationId);
+  } 
+
   render() {
     let { profile } = this.props;
     if (!profile || !profile.profile) {
@@ -11,14 +20,14 @@ class CredentialDetail extends Component {
     profile = profile.profile;
     return (
       <div>
-        <ExperienceList experience={profile.experience} />
-        <EducationalList education={profile.education} />
+        <ExperienceList experience={profile.experience} deleteExperience={this.deleteExperience} />
+        <EducationalList education={profile.education} deleteEducation = {this.deleteEducation} />
       </div>
     );
   }
 }
 
-const ExperienceList = ({ experience }) => {
+const ExperienceList = ({ experience,deleteExperience }) => {
   if (!experience || !experience.length) {
     return null;
   }
@@ -29,7 +38,7 @@ const ExperienceList = ({ experience }) => {
         <td>{experience.title}</td>
         <td>{`${moment(experience.from).format("MMM Do YY")}-${experience.to ? moment(experience.to).format("MMM Do YY") : "now"}` }</td>
         <td>
-          <button class="btn btn-danger">Delete</button>
+          <button class="btn btn-danger" onClick = {()=>deleteExperience(experience._id)}>Delete</button>
         </td>
       </tr>
     );
@@ -54,7 +63,7 @@ const ExperienceList = ({ experience }) => {
   );
 };
 
-const EducationalList = ({ education }) => {
+const EducationalList = ({ education,deleteEducation }) => {
   if (!education || !education.length) {
     return null;
   }
@@ -65,7 +74,7 @@ const EducationalList = ({ education }) => {
         <td>{education.degree}</td>
         <td>{`${moment(education.from).format("MMM Do YY")}-${education.to ? moment(education.to).format("MMM Do YY") : "now"}` }</td>
         <td>
-          <button class="btn btn-danger">Delete</button>
+          <button class="btn btn-danger" onClick={()=>deleteEducation(education._id)}>Delete</button>
         </td>
       </tr>
     );
@@ -96,4 +105,4 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(mapStateToProps)(CredentialDetail);
+export default connect(mapStateToProps,{deleteProfileCredentail})(CredentialDetail);

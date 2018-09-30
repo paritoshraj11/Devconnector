@@ -25,6 +25,17 @@ export const getCurrentProfile = () => dispatch => {
     });
 };
 
+export const deleteProfileCredentail = (credentail,credentailId) => dispatch =>{
+  axios.delete(`/profile/deleteCredentail/${credentail}/${credentailId}`).then(res=>{
+    dispatch({
+      type: GET_PROFILE,
+      data: res.data
+    });
+  }).catch(err=>{
+
+  })
+}
+
 export const addUserProfile = (data, history) => dispatch => {
   axios
     .post("/profile", data)

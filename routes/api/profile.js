@@ -28,11 +28,10 @@ route.get(
         errors.noprofile = "No profile found for this user";
         return res.status(400).json(errors);
       }
-      res.json(profile);
+     return res.json(profile);
     } catch (err) {
       return res.status(400).json(err);
     }
-    res.json(user);
   }
 );
 
@@ -103,7 +102,6 @@ route.post(
       twitter,
       linkedin
     } = req.body;
-
 
     const { error, isValid } = profileValidator(req.body);
     if (!isValid) {
@@ -238,5 +236,40 @@ route.post(
       });
   }
 );
+
+//route for delete Experience
+route.delete(
+  `/deleteCredentail/:credential/:credentailId`,
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    let {credential,credentailId} = req.params;
+    if(!credentailId || !credential){
+      return ;
+    }
+    try{
+      let user = await User.findById(req.user._id);
+      if(!user){
+        return res.status(400).send("User not found");
+      }
+      let profile = await Profile.findOne({user:req.user._id});
+      if(!profile){
+        return res.status(400).send("Profile not found");
+      }
+      let credentialToModify = profile[credential];
+      let indexToDelete = credentialToModify.map(exp=>exp._id.toString()).indexOf(credentailId.toString())
+      if(indexToDelete >=0){
+        //remove that experience;
+        credentialToModify.splice(indexToDelete,1);
+      }
+      profile.save().then(result=>{
+       return res.status(200).json(result);
+      }).catch(err=>res.status(400).send("Error in saving Profile"))
+    }catch(err){
+      console.log(">>>>> error in deleting experience",err);
+    }
+  }
+);
+
+
 
 module.exports = route;

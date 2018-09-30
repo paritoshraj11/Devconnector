@@ -35,7 +35,7 @@ class Dashboard extends Component {
           <CredentialDetail/>
           {/* Todo */}
           <div style={{marginBottom:60}}/>
-          <button onClick={this.handleDelete} className="btn btn-danger"> DELETE ACCOUNT</button>
+          {/* <button onClick={this.handleDelete} className="btn btn-danger"> DELETE ACCOUNT</button> */}
         </div>
       );
     } else {

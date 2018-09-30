@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { addPost } from "../../action";
 import TextAreaField from "../Common/TextAreaField";
+import FileInputField from "../Common/FileInputField";
 
 class PostForm extends Component {
   state = {
@@ -29,13 +30,11 @@ class PostForm extends Component {
     let { text } = this.state;
     let { onSubmitForm } = this.props;
     let { name, avatar } = this.props.auth.user;
-    console.log(">>>>> name",name)
-    console.log(">>>>> avatar",avatar)
     let newPost = {
       name,
       avatar,
       text
-    };
+        };
 
     if (onSubmitForm) {
       onSubmitForm && onSubmitForm(newPost);
