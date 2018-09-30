@@ -110,6 +110,7 @@ const ProfileSchema = new Schema({
         linkedin:{
             type:String
         },
+        
 
 
     },

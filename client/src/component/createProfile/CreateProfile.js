@@ -97,7 +97,7 @@ class CreateProfile extends Component {
           name="facebook"
           value={facebook}
           error={error.facebook}
-          placeholder="Fwitter Profile URL"
+          placeholder="Facebook Profile URL"
           onChange={this.onChange}
         />
         <InputGropup
